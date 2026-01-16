@@ -27,14 +27,8 @@ ESTILO DE RESPUESTA:
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY }); 
-    <script>
-        window.process = {
-            env: {
-                API_KEY: "AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" // Se inyectará automáticamente
-            }
-        };
-    </script>
+    const ai = new GoogleGenAI({ apiKey: process.env."AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" }); 
+    
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Dilo con voz de mujer peruana muy dulce, amable y maternal: ${text}` }] }],
@@ -55,7 +49,7 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
 }
 
 export async function getChatResponse(message: string) {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env."AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" });    
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -92,7 +86,7 @@ export async function getChatResponse(message: string) {
 
 export async function generateTintayImage(prompt: string) {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env."AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: `Representación artística de Tintay, Apurímac: ${prompt}. Estilo fotográfico realista, colores vibrantes, luz de montaña.`,
