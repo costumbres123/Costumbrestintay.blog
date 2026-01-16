@@ -27,7 +27,14 @@ ESTILO DE RESPUESTA:
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY }); 
+    <script>
+        window.process = {
+            env: {
+                API_KEY: "AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" // Se inyectará automáticamente
+            }
+        };
+    </script>
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Dilo con voz de mujer peruana muy dulce, amable y maternal: ${text}` }] }],
