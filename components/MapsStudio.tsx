@@ -13,7 +13,7 @@ export const MapsStudio: React.FC = () => {
     setPlaces([]);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env."AIzaSyC3T8EAZt5WpnmUMu9Pt-KLvTwnmCZ5hkw" });
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: `Encuentra este lugar en Tintay o Apurímac: ${query}. Dame detalles turísticos y culturales.`,
