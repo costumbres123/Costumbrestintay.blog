@@ -26,9 +26,8 @@ ESTILO DE RESPUESTA:
 `;
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
-  const ai = new GoogleGenAI({ apiKey: "AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc"
- });
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Dilo con voz de mujer peruana muy dulce, amable y maternal: ${text}` }] }],
@@ -43,14 +42,13 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
     });
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
   } catch (error) {
-    console.error("Error en TTS:", error);
+    console.warn("Error en TTS (opcional):", error);
     return undefined;
   }
 }
 
-export async function getChatResponse(message: string, isVoice: boolean = false) {
-  const ai = new GoogleGenAI({ apiKey: "AIzaSyDkEC1zUePwxG0la7Z"-e1hpWRJm-yMTMAc
- });
+export async function getChatResponse(message: string) {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -63,11 +61,20 @@ export async function getChatResponse(message: string, isVoice: boolean = false)
 
     const text = response.text || "¡Ay, corazoncito! No te escuché bien, ¿me lo repites por favor?";
     
-    const audioData = await synthesizeText(text);
-    const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map(chunk => ({
-      title: chunk.web?.title || "Fuente cultural",
-      uri: chunk.web?.uri || "#"
-    }));
+    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+    const sources = chunks
+      .filter(chunk => chunk.web)
+      .map(chunk => ({
+        title: chunk.web?.title || "Fuente de información",
+        uri: chunk.web?.uri || "#"
+      }));
+
+    let audioData: string | undefined;
+    try {
+      audioData = await synthesizeText(text);
+    } catch (e) {
+      console.warn("No se pudo generar el audio, continuando con texto solo.");
+    }
 
     return { text, audioData, sources };
   } catch (error) {
@@ -77,9 +84,8 @@ export async function getChatResponse(message: string, isVoice: boolean = false)
 }
 
 export async function generateTintayImage(prompt: string) {
-  const ai = new GoogleGenAI({ apiKey: AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc
- });
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: `Representación artística de Tintay, Apurímac: ${prompt}. Estilo fotográfico realista, colores vibrantes, luz de montaña.`,
@@ -90,6 +96,7 @@ export async function generateTintayImage(prompt: string) {
         return `data:image/png;base64,${part.inlineData.data}`;
       }
     }
+    return null;
   } catch (error) {
     console.error("Image gen error:", error);
     return null;
