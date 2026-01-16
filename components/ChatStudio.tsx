@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Message, MessageRole, AudioProcessingState } from '../services/types';
-import { getChatResponse, synthesizeText } from '../services/geminiService';
+import { getChatResponse } from '../services/geminiService';
 import { decodeBase64, decodeAudioData } from '../utils/audioHelpers';
-import { AudioVisualizer } from './AudioVisualizer';
 
 export const ChatStudio: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -47,13 +46,14 @@ export const ChatStudio: React.FC = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
     }
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
     return audioContextRef.current;
   };
 
   const playAudio = async (base64: string) => {
     const ctx = initAudio();
-    if (ctx.state === 'suspended') await ctx.resume();
-    
     try {
       setAudioState(prev => ({ ...prev, isPlaying: true }));
       const decoded = decodeBase64(base64);
@@ -75,6 +75,7 @@ export const ChatStudio: React.FC = () => {
   const handleSend = async () => {
     if (!inputText.trim() || audioState.isProcessing) return;
     
+    // Activar audio en interacción del usuario
     initAudio();
 
     const userMsg: Message = {
@@ -109,7 +110,7 @@ export const ChatStudio: React.FC = () => {
       const errorMsg: Message = {
         id: 'err-' + Date.now(),
         role: MessageRole.ASSISTANT,
-        text: "¡Ay, papachay! Se me cortó la señal. ¿Me lo repites, corazoncito?",
+        text: "¡Ay, papachay! Se me cortó la señal del cerro. ¿Me lo repites, corazoncito?",
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, errorMsg]);
@@ -204,11 +205,6 @@ export const ChatStudio: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </button>
-        </div>
-        <div className="flex justify-center mt-4 space-x-6 opacity-40 grayscale hover:grayscale-0 transition-all">
-           <a href="https://tiktok.com/@costumbrestintay" target="_blank" className="text-[10px] font-black uppercase tracking-widest hover:text-emerald-700">TikTok</a>
-           <a href="https://youtube.com/@costumbrestintay" target="_blank" className="text-[10px] font-black uppercase tracking-widest hover:text-red-700">YouTube</a>
-           <a href="https://facebook.com/costumbrestintay" target="_blank" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-800">Facebook</a>
         </div>
       </div>
     </div>
