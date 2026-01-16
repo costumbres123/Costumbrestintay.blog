@@ -26,7 +26,7 @@ ESTILO DE RESPUESTA:
 `;
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY
+  const ai = new GoogleGenAI({ apiKey: "AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc"
  });
   try {
     const response = await ai.models.generateContent({
@@ -49,7 +49,7 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
 }
 
 export async function getChatResponse(message: string, isVoice: boolean = false) {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY
+  const ai = new GoogleGenAI({ apiKey: AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc
  });
   try {
     const response = await ai.models.generateContent({
@@ -77,7 +77,7 @@ export async function getChatResponse(message: string, isVoice: boolean = false)
 }
 
 export async function generateTintayImage(prompt: string) {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY
+  const ai = new GoogleGenAI({ apiKey: AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc
  });
   try {
     const response = await ai.models.generateContent({
