@@ -27,7 +27,7 @@ ESTILO DE RESPUESTA:
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
   try {
-    const ai = new GoogleGenAI({ apiKey: "AIzaSyB1HPKPJirYub9qVGBeE3cRLGJ5qN0ytsg" });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Dilo con voz de mujer peruana muy dulce, amable y maternal: ${text}` }] }],
@@ -48,7 +48,7 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
 }
 
 export async function getChatResponse(message: string) {
-  const ai = new GoogleGenAI({ apiKey: "AIzaSyB1HPKPJirYub9qVGBeE3cRLGJ5qN0ytsg" });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -85,7 +85,7 @@ export async function getChatResponse(message: string) {
 
 export async function generateTintayImage(prompt: string) {
   try {
-    const ai = new GoogleGenAI({ apiKey: "AIzaSyB1HPKPJirYub9qVGBeE3cRLGJ5qN0ytsg" });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: `Representación artística de Tintay, Apurímac: ${prompt}. Estilo fotográfico realista, colores vibrantes, luz de montaña.`,
