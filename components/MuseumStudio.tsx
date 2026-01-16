@@ -21,20 +21,25 @@ export const MuseumStudio: React.FC = () => {
         contents: `Investigación histórica profunda para Tintay: ${query}. Responde con tono académico pero muy cariñoso, como una mamachay que cuenta historias del pasado.`,
         config: {
           systemInstruction: SYSTEM_INSTRUCTION,
-          // Al usar thinkingBudget es obligatorio configurar maxOutputTokens
+          // When using thinkingBudget, maxOutputTokens must be defined.
           maxOutputTokens: 8000,
           thinkingConfig: { thinkingBudget: 4000 },
           tools: [{ googleSearch: {} }]
         },
       });
 
-      setResult(response.text || "No encontré lo que buscabas, corazoncito.");
+      const responseText = response.text || "No encontré lo que buscabas, corazoncito.";
+      setResult(responseText);
       
       const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
       setSources(chunks.filter(c => c.web));
-    } catch (err) {
-      console.error(err);
-      setResult("¡Ay, papachay! Hubo un error buscando en la memoria de los abuelos. ¿Me lo repites?");
+    } catch (err: any) {
+      console.error("Error en investigación:", err);
+      if (err?.message?.includes('429')) {
+        setResult("¡Ay, tesoro! Muchos me están preguntando cositas ahora. Esperemos un ratito para seguir conversando, ¿ya?");
+      } else {
+        setResult("¡Ay, papachay! Hubo un error buscando en la memoria de los abuelos. ¿Me lo repites, tesoro?");
+      }
     } finally {
       setLoading(false);
     }
@@ -54,7 +59,7 @@ export const MuseumStudio: React.FC = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleInvestigate()}
             placeholder="¿Qué historia te gustaría conocer, tesoro?"
-            className="w-full bg-emerald-50 border-2 border-emerald-100 p-4 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium"
+            className="w-full bg-emerald-50 border-2 border-emerald-100 p-4 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium text-emerald-900"
           />
           <button 
             onClick={handleInvestigate}
