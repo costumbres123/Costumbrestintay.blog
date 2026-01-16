@@ -49,7 +49,7 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
 }
 
 export async function getChatResponse(message: string, isVoice: boolean = false) {
-  const ai = new GoogleGenAI({ apiKey: AIzaSyDkEC1zUePwxG0la7Z-e1hpWRJm-yMTMAc
+  const ai = new GoogleGenAI({ apiKey: "AIzaSyDkEC1zUePwxG0la7Z"-e1hpWRJm-yMTMAc
  });
   try {
     const response = await ai.models.generateContent({
