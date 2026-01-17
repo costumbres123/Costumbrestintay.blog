@@ -18,7 +18,7 @@ REGLAS DE INTERACCIÓN:
 
 export async function synthesizeText(text: string): Promise<string | undefined> {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: "AIzaSyAyyjo8DbqMqEgTXOND65b_A-ojTpUvFLk" });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Dilo con voz de mujer peruana muy dulce y maternal: ${text}` }] }],
@@ -39,7 +39,7 @@ export async function synthesizeText(text: string): Promise<string | undefined> 
 }
 
 export async function getChatResponse(message: string) {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: "AIzaSyAyyjo8DbqMqEgTXOND65b_A-ojTpUvFLk" });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -83,7 +83,7 @@ export async function getChatResponse(message: string) {
 
 export async function generateTintayImage(prompt: string) {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: "AIzaSyAyyjo8DbqMqEgTXOND65b_A-ojTpUvFLk" });
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: `Representación artística de Tintay, Apurímac: ${prompt}. Estilo realista, colores vivos.`,
